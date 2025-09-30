@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercise Library</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #111; margin: 0; padding: 0; color: #fff; }
+    .header { background-color: #222; color: #fff; padding: 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: bold; border-bottom: 1px solid #333; }
+    .logo-wrapper { width: 36px; height: 36px; margin-right: 0.5rem; flex-shrink: 0; overflow: hidden; }
+    .logo-wrapper .imgur-embed-pub { width: 100%; height: 100%; }
+    .container { max-width: 750px; margin: 1rem auto; background-color: rgba(17, 17, 17, 0.9); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 18px; backdrop-filter: blur(12px); box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.03), inset 0 -2px 4px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.4); position: relative; padding: 1.25rem; }
+    .container::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; border-radius: inherit; background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.35)); pointer-events: none; z-index: 0; }
+    .back-link { display:block; color:#00b894; text-decoration:none; margin-bottom:1rem; font-size:0.9rem; }
+    .description { margin: 0.5rem 0 1.5rem 0; color: #ccc; font-size: 0.9rem; }
+    .exercise-cards { margin-top: 0; }
+    .exercise-card { background: linear-gradient(135deg, #0c0f12 0%, #151a20 100%); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 1rem; margin-bottom: 1rem; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+    .exercise-card::before { content:''; position: absolute; bottom:-120px; left:50%; transform: translateX(-50%); width:240px; height:240px; background: radial-gradient(circle, rgba(0,184,148,0.4) 0%, rgba(0,184,148,0.2) 40%, transparent 70%); border-radius:50%; filter: blur(20px); opacity:0.4; pointer-events:none; z-index:0; }
+    .exercise-header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; }
+    .exercise-name { font-weight:bold; font-size:1rem; color:#fff; margin-right:0.5rem; flex:1 1 auto; }
+    .exercise-metadata { display:flex; flex-wrap:wrap; gap:12px; font-size:0.75rem; color:#ccc; align-items:center; }
+    .exercise-notes { margin-top: 0.5rem; font-size: 0.65rem; color: rgba(218,216,201,0.75); font-weight: normal; }
+    .video-section { margin-top: 0.5rem; }
+    .toggle-video-btn { display:inline-block; margin-bottom:0.5rem; padding:0.35rem 0.75rem; background-color:#00b894; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:0.85rem; transition: background-color 0.2s ease; }
+    .toggle-video-btn:hover { background-color:#008f73; }
+    .video-container { position: relative; width:100%; padding-bottom: 56.25%; height:0; overflow:hidden; border-radius:8px; background-color:#000; }
+    .video-container iframe, .video-container video { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+
+    /*
+     * Select button styling
+     * Each exercise card in the library gains a "Select" button in the
+     * bottom‑right corner. The button adopts the same green accent used
+     * throughout the site and is sized to remain unobtrusive. Hover
+     * styles darken the colour slightly for feedback.  A high z‑index
+     * ensures it stays above the card’s background glow.
+     */
+    .select-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      padding: 0.35rem 0.75rem;
+      background-color: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      z-index: 2;
+      opacity: 0.9;
+    }
+    .select-btn:hover {
+      background-color: #008f73;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-wrapper">
+      <blockquote class="imgur-embed-pub" lang="en" data-id="a/VsGUO3p" data-context="false"><a href="//imgur.com/a/VsGUO3p"></a></blockquote>
+    </div>
+    <span>Exercise Library</span>
+  </div>
+  <div class="container">
+    <a href="index.html" class="back-link">&larr; Back to overview</a>
+    <p class="description">Browse all exercises from the plan. Select an exercise to add or exchange it in your workout.</p>
+    <div class="exercise-cards">
+      <!-- Exercise cards generated from all unique exercises -->
+      <!-- BEGIN GENERATED CARDS -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Leg Press</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Leg Press</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Feet shoulder‑width; full, controlled depth.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo0" type="button">Show Video ▼</button>
+          <div id="exlibVideo0" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/3llxjv?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Leg Extension Machine Dropset → 50% Load</div>
+          <div class="exercise-metadata">
+            <span>3×8–10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Knees in line with shin.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo1" type="button">Show Video ▼</button>
+          <div id="exlibVideo1" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/ht3mfk?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Seated Leg Curl Dropset → 50% load</div>
+          <div class="exercise-metadata">
+            <span>3×10–12</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Squeeze hamstrings; slow return.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo2" type="button">Show Video ▼</button>
+          <div id="exlibVideo2" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/qf8vl0?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Smith Machine Squats</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>DBs</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Short stride if front knee aches; stay tall.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo3" type="button">Show Video ▼</button>
+          <div id="exlibVideo3" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/y0pvfj?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Smith Machine Split Squats</div>
+          <div class="exercise-metadata">
+            <span>3×8/side</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Cable</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Pretend you are pushing your foot through the floor.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo4" type="button">Show Video ▼</button>
+          <div id="exlibVideo4" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/74m8eb?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Standing Calf Raise</div>
+          <div class="exercise-metadata">
+            <span>3×12–15</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine/Smith</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Pause at top & bottom.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo5" type="button">Show Video ▼</button>
+          <div id="exlibVideo5" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/wrh565?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Prone Leg Curl Machine</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Slowed and controlled; set the pad where your ankle is.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo6" type="button">Show Video ▼</button>
+          <div id="exlibVideo6" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/edhcni?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Hip Abduction/Adduction</div>
+          <div class="exercise-metadata">
+            <span>2×12 each side</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Slowed and controlled; go through your available ROM.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Warm‑Up</div>
+          <div class="exercise-metadata">
+            <span>—</span>
+            <span>Slow</span>
+            <span>—</span>
+            <span>—</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Get blood flowing to the joints and muscles.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Leg Extension</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Knees in line with shin; make sure your toes do not point forward. The back of your leg will push into the seat as you contract quad.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo9" type="button">Show Video ▼</button>
+          <div id="exlibVideo9" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/ht3mfk?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Leg Curls</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Make sure toes are pointed toward you, and creep up towards the top of the lift slowly to engage hamstrings more.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo10" type="button">Show Video ▼</button>
+          <div id="exlibVideo10" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/qf8vl0?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Single Leg Extension</div>
+          <div class="exercise-metadata">
+            <span>2×8/leg</span>
+            <span>Slow</span>
+            <span>None</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Go very light, and do not rest. Do 8 reps on one leg then 8 reps on the other and keep switching twice.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo11" type="button">Show Video ▼</button>
+          <div id="exlibVideo11" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/bfrjqq?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Seated Calf Raises</div>
+          <div class="exercise-metadata">
+            <span>3×15</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">At the bottom when you feel the stretch, go very slowly and lightly. Can engage calves more.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo12" type="button">Show Video ▼</button>
+          <div id="exlibVideo12" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/q42ni2?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Standing Calf Raises</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes"></div>
+      </div>
+      <!--
+        The following cards extend the library with exercises from Days 2 and 4.  Each card
+        follows the same visual pattern as the existing ones: exercise name, basic metadata
+        (sets × reps, tempo, rest, equipment), a notes section, and an optional video
+        toggle when footage is available.  Unique identifiers (exlibVideo13 and up) are
+        assigned to each new video container to avoid conflicts with previous IDs.
+      -->
+
+      <!-- Day 2 exercises -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Warm‑Up</div>
+          <div class="exercise-metadata">
+            <span>—</span>
+            <span>Slow</span>
+            <span>—</span>
+            <span>—</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Get blood flowing to the joints and muscles.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Chest Press</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Stick chest up and start with shoulder blades protracted and arms out straight. Only go back as far as feels comfortable.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo13" type="button">Show Video ▼</button>
+          <div id="exlibVideo13" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/wdqfiy?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Lateral Raise</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine/Cable/DB</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Only go up as high as you can without feeling pain. Lighten the weight to go higher through your range of motion.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo14" type="button">Show Video ▼</button>
+          <div id="exlibVideo14" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/nnml0w?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Flat Bench Press (No Barbell Yet)</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>DBs</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Go as low as needed to feel the muscle lengthening. If you start feeling anything in the shoulder, do not go lower than that.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo15" type="button">Show Video ▼</button>
+          <div id="exlibVideo15" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/zwt1j7?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Shoulder Flexion (Front Delt Raise)</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>DBs (Light)</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Raise the weights in a controlled manner and only go up to about nose level.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo16" type="button">Show Video ▼</button>
+          <div id="exlibVideo16" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/3tlyfs?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Lat Pulldowns</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine/Cable</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Ensure your shoulder blades are moving up and down but do not shrug. Lean back slightly for extra lat activation.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo17" type="button">Show Video ▼</button>
+          <div id="exlibVideo17" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/kc6o6q?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Curls (on Lat Pulldown Seat)</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Normal</span>
+            <span>45 s</span>
+            <span>DBs</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Slowed and controlled; make sure you do not sway.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo18" type="button">Show Video ▼</button>
+          <div id="exlibVideo18" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/r9izbr?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Rows</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine/Cable</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Focus on shoulder blade retraction and protraction. Pretend you are squeezing a pencil between your shoulder blades.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo19" type="button">Show Video ▼</button>
+          <div id="exlibVideo19" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/57wg9o?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Hammer Curls</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>2‑1‑2</span>
+            <span>45 s</span>
+            <span>DB</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Neutral grip.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo20" type="button">Show Video ▼</button>
+          <div id="exlibVideo20" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/4k8b9v?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Lat Pulldown (Neutral Grip)</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Make sure your shoulder blades are moving up and down, but do not shrug. Lean back a little for extra lat activation.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">EZ Bar Reverse Curls (Brachioradialis)</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>2‑1‑2</span>
+            <span>45 s</span>
+            <span>EZ Bar</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Go through full ROM; you can stand in a staggered stance for extra balance.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo21" type="button">Show Video ▼</button>
+          <div id="exlibVideo21" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/7pn8sq?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 4 exercises -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Warm‑Up</div>
+          <div class="exercise-metadata">
+            <span>—</span>
+            <span>Slow</span>
+            <span>—</span>
+            <span>—</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Get blood flowing to the joints and muscles.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Chest Press</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Stick chest up and start with shoulder blades protracted and arms out straight. Then, only go back as far as you can that feels comfortable.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo22" type="button">Show Video ▼</button>
+          <div id="exlibVideo22" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/wdqfiy?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Tricep Extensions</div>
+          <div class="exercise-metadata">
+            <span>3×14</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Cables/EZ bar</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Make sure you are squeezing your shoulder blades back to pull more with triceps and to lock the shoulder into place.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo23" type="button">Show Video ▼</button>
+          <div id="exlibVideo23" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/xnn0o5?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Incline Bench Press</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine/DBs</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Go as low as you need to go to feel the lengthening of the muscle. If you start feeling anything in the shoulder, do not go lower than that.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo24" type="button">Show Video ▼</button>
+          <div id="exlibVideo24" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/np4w3d?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Lateral Raise</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Raise the weights in a controlled manner, and only go up to about where your nose is. Set the seat so your shoulders are in line with the weight.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo25" type="button">Show Video ▼</button>
+          <div id="exlibVideo25" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/nnml0w?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Lat Pulldowns</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine/Cable</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Ensure your shoulder blades are moving up and down but do NOT shrug. Lean back a little for extra lat activation.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo26" type="button">Show Video ▼</button>
+          <div id="exlibVideo26" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/kc6o6q?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Curls</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Normal</span>
+            <span>30 s</span>
+            <span>DBs</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Slowed and controlled; make sure your chest is up and tall.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo27" type="button">Show Video ▼</button>
+          <div id="exlibVideo27" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/r9izbr?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Rows</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine/Cable</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Shoulder blades retracting and protracting. Pretend you are squeezing a pencil between your shoulder blades.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo28" type="button">Show Video ▼</button>
+          <div id="exlibVideo28" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/57wg9o?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Hammer Curls</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>2‑1‑2</span>
+            <span>30 s</span>
+            <span>DB</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Neutral grip.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo29" type="button">Show Video ▼</button>
+          <div id="exlibVideo29" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/4k8b9v?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Tricep Extensions (Rope)</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Cables/Rope</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Make sure you are squeezing your shoulder blades back to pull more with triceps and to lock the shoulder into place.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo30" type="button">Show Video ▼</button>
+          <div id="exlibVideo30" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/s1mfa6?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Cable Curls</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>3‑1‑3</span>
+            <span>30 s</span>
+            <span>Rope</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Go through full ROM; you can stand in a staggered stance for extra balance.</div>
+      </div>
+
+      <!-- Day 5 therapy/upper body exercises -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Stairmaster</div>
+          <div class="exercise-metadata">
+            <span>25 min</span>
+            <span>—</span>
+            <span>—</span>
+            <span>Stairmaster</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Continuous cardio with moderate effort.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Band External Rotation</div>
+          <div class="exercise-metadata">
+            <span>2×12/side</span>
+            <span>Slow</span>
+            <span>30–45 s</span>
+            <span>Light cable or band</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Tuck a towel between elbow and ribs and keep elbow glued. Perform a smooth, pain‑free arc.</div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">External/Internal Rotation Isometric vs. Wall</div>
+          <div class="exercise-metadata">
+            <span>2×20–30 s/side</span>
+            <span>Slow</span>
+            <span>30–45 s</span>
+            <span>Wall + towel</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Keep forearm vertical and gently push outward into the wall without moving. No pain.</div>
+      </div>
+
+      <!-- Additional Day 3 lower‑body movements (hip hinge and compound leg movements) -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">RDL (Hip Hinge)</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Normal</span>
+            <span>30 s</span>
+            <span>Dumbbells</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Slowed and controlled. Make sure you are hinging hips. Pretend there is a wall behind you, and you are trying to touch the wall with your butt. You will feel hamstrings activate, then squeeze glutes to the very top (anterior pelvic tilt).</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo31" type="button">Show Video ▼</button>
+          <div id="exlibVideo31" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/sakhob?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Squats</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine/Cable</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Feet shoulder‑width; full, controlled depth.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo32" type="button">Show Video ▼</button>
+          <div id="exlibVideo32" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/qb9oj1?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Stationary Lunges</div>
+          <div class="exercise-metadata">
+            <span>3×10 each leg</span>
+            <span>Control</span>
+            <span>45 s</span>
+            <span>Bodyweight/DB</span>
+          </div>
+        </div>
+        <div class="exercise-notes">Can hold onto Smith Machine bar if balance is a problem. Hold the dumbbell on the side you are pushing into the floor. Can do reverse lunges instead. Make sure your knee is not going over your toe and make sure you are not pushing through your toes; keep about 80% of your weight on your heel and about 20% on your toes.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="exlibVideo33" type="button">Show Video ▼</button>
+          <div id="exlibVideo33" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/uarxv9?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+
+    <!-- END GENERATED CARDS -->
+    </div>
+  </div>
+
+  <!-- Selection handling script -->
+  <script>
+    (function() {
+      // Parse query parameters to determine which day we are returning to and
+      // whether we are replacing an existing card. The day parameter should
+      // correspond to the base filename of the destination page (e.g., "day1").
+      const params = new URLSearchParams(window.location.search);
+      const dayParam = params.get('day');
+      const indexParam = params.get('index');
+      const modeParam = params.get('mode') || 'add';
+
+      // Helper to normalise the day value by stripping any trailing .html
+      function normaliseDay(d) {
+        if (!d) return null;
+        return d.replace(/\.html$/i, '');
+      }
+      const day = normaliseDay(dayParam);
+
+      // Attach a "Select" button to every exercise card. When pressed, the
+      // button will gather the exercise details, persist them in
+      // localStorage under the key "pendingAction", and navigate back
+      // to the originating day page. If no day is provided, a message is
+      // displayed instructing the user to use the add/exchange buttons.
+      document.querySelectorAll('.exercise-card').forEach(function(card) {
+        const btn = document.createElement('button');
+        btn.textContent = 'Select';
+        btn.classList.add('select-btn');
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          // Extract exercise details from the card
+          const nameEl = card.querySelector('.exercise-name');
+          const name = nameEl ? nameEl.textContent.trim() : '';
+          const metaSpans = card.querySelectorAll('.exercise-metadata span');
+          const sets = metaSpans[0] ? metaSpans[0].textContent.trim() : '';
+          const tempo = metaSpans[1] ? metaSpans[1].textContent.trim() : '';
+          const rest = metaSpans[2] ? metaSpans[2].textContent.trim() : '';
+          const equipment = metaSpans[3] ? metaSpans[3].textContent.trim() : '';
+          const notesEl = card.querySelector('.exercise-notes');
+          const notes = notesEl ? notesEl.textContent.trim() : '';
+          const videoIframe = card.querySelector('.video-container iframe');
+          const videoURL = videoIframe ? videoIframe.getAttribute('src') : '';
+          const data = { name: name, sets: sets, tempo: tempo, rest: rest, equipment: equipment, notes: notes, video: videoURL };
+          if (day) {
+            const pending = {
+              day: day,
+              index: (indexParam !== null && indexParam !== '' && !isNaN(parseInt(indexParam))) ? parseInt(indexParam) : null,
+              mode: modeParam,
+              data: data
+            };
+            try {
+              localStorage.setItem('pendingAction', JSON.stringify(pending));
+            } catch (err) {
+              console.error('Unable to store pending action:', err);
+            }
+            // Redirect back to the day page. Use a relative path with
+            // './' to ensure navigation stays within the same folder.
+            window.location.href = './' + day + '.html';
+          } else {
+            alert('No target day specified. Use the add/exchange buttons on a day page to select an exercise.');
+          }
+        });
+        card.appendChild(btn);
+      });
+    })();
+  </script>
+  <script>
+    // Attach toggle handlers for video buttons in the library page
+    document.querySelectorAll('.toggle-video-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const container = document.getElementById(targetId);
+        if (!container) return;
+        if (container.style.display === 'none' || container.style.display === '') {
+          container.style.display = 'block';
+          btn.textContent = 'Hide\u00a0Video\u00a0\u25B2';
+        } else {
+          container.style.display = 'none';
+          btn.textContent = 'Show\u00a0Video\u00a0\u25BC';
+        }
+      });
+    });
+  </script>
+  <!-- Load Imgur embed script for logo -->
+  <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+</body>
+</html>

@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 1: Lower/Core Workout Sheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+    .header {
+      background-color: #222;
+      color: #fff;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      border-bottom: 1px solid #333;
+    }
+    .logo-wrapper {
+      width: 36px;
+      height: 36px;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .logo-wrapper .imgur-embed-pub {
+      width: 100%;
+      height: 100%;
+    }
+    .container {
+      max-width: 650px;
+      margin: 1rem auto;
+      /* Semi-transparent dark background with glassmorphism styling */
+      background-color: rgba(17, 17, 17, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.03),
+                  inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+                  /* Softer outer shadow to match Day 2 styling */
+                  0 2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      padding: 1.25rem;
+    }
+
+    /* Gradient overlay for container depth */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.02),
+        rgba(0, 0, 0, 0.35)
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+    .info p {
+      margin: 0.5rem 0;
+      line-height: 1.4;
+      color: #ccc;
+    }
+    .info strong {
+      display: inline-block;
+      min-width: 120px;
+      color: #fff;
+    }
+    .back-link {
+      display: block;
+      color: #00b894;
+      text-decoration: none;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    /* Card layout for exercises */
+    .exercise-cards {
+      margin-top: 1.5rem;
+    }
+    .exercise-card {
+      /* Modern card styling similar to Day 2 sports cards */
+      background: #0c0f12;
+      background: linear-gradient(135deg, #0c0f12 0%, #151a20 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 120px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0.8;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Slightly darken card on hover without pop-out animation */
+    .exercise-card:hover {
+      background-color: #14181d;
+    }
+
+    /* Faint radial gradient half circle inside each card */
+    .exercise-card::before {
+      content: '';
+      position: absolute;
+      bottom: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(0, 184, 148, 0.4) 0%, rgba(0, 184, 148, 0.2) 40%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(20px);
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .exercise-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .exercise-name {
+      font-weight: bold;
+      font-size: 1rem;
+      color: #fff;
+      margin-right: 0.5rem;
+      flex: 1 1 auto;
+    }
+    .exercise-metadata {
+      display: flex;
+      /* Keep metadata on a single line when possible by shrinking its scale */
+      flex-wrap: nowrap;
+      gap: 12px;
+      font-size: 0.75rem;
+      color: #ccc;
+      align-items: center;
+      transform: scale(0.8);
+      transform-origin: right center;
+    }
+    .exercise-metadata input.weight-input {
+      margin: 0;
+    }
+    .exercise-notes {
+      margin-top: 0.5rem;
+      font-size: 0.6rem;
+      color: rgba(218, 216, 201, 0.75);
+      font-weight: normal;
+    }
+    .video-section {
+      margin-top: 0.5rem;
+    }
+    /* Weight input styling */
+    .weight-input {
+      /* Reduce weight input width to half size for consistency */
+      width: 60px;
+      padding: 0.25rem 0.4rem;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #333;
+      color: #fff;
+      font-size: 0.75rem;
+      box-sizing: border-box;
+    }
+    /* Toggle video button */
+    .toggle-video-btn {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      background-color: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      /* Smooth color transition only; no pop-out */
+      transition: background-color 0.2s ease;
+    }
+    .toggle-video-btn:hover {
+      background-color: #008f73;
+    }
+    /* Video container */
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      background-color: #000;
+    }
+    .video-container iframe,
+    .video-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Exchange and add-exercise button styling */
+    .exchange-btn {
+      position: absolute;
+      /* Position the exchange button in the bottom‑right corner instead of the top. */
+      bottom: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+    .exchange-btn img {
+      width: 100%;
+      height: 100%;
+    }
+    .add-exercise-container {
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+    .add-exercise-btn {
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      background-color: #00b894;
+      color: #111;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .add-exercise-btn:hover {
+      background-color: #008f73;
+      color: #111;
+    }
+    /* Core section styles */
+    .core-section {
+      margin-top: 1.5rem;
+    }
+    .core-section h3 {
+      margin-bottom: 0.5rem;
+      color: #00b894;
+      font-size: 1rem;
+    }
+    .core-section ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      list-style: disc;
+    }
+    .core-section li {
+      margin-bottom: 0.4rem;
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    /* Rest timer styling */
+    .start-btn {
+      display: block;
+      width: 100%;
+      background-color: #00b894;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      padding: 0.75rem 0;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-top: 2rem;
+      transition: background-color 0.2s ease;
+    }
+    .start-btn:hover {
+      background-color: #008f73;
+    }
+    .rest-timer-section {
+      display: none;
+      margin-top: 1.5rem;
+      background-color: #1b1b1b;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .rest-timer-section label {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    .rest-timer-section .timer-input {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0 1rem;
+    }
+    .rest-timer-section input[type="range"] {
+      flex: 1;
+      appearance: none;
+      height: 4px;
+      background: #333;
+      outline: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .rest-timer-section input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #00b894;
+      cursor: pointer;
+    }
+    .rest-timer-section input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #00b894;
+      cursor: pointer;
+      border: none;
+    }
+    #restDurationLabel {
+      color: #fff;
+      font-size: 1rem;
+      min-width: 3rem;
+      text-align: center;
+    }
+    #countdownDisplay {
+      margin-top: 0.75rem;
+      font-size: 1.2rem;
+      color: #00b894;
+      font-weight: bold;
+      min-height: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-wrapper">
+      <blockquote class="imgur-embed-pub" lang="en" data-id="a/VsGUO3p" data-context="false"><a href="//imgur.com/a/VsGUO3p"></a></blockquote>
+    </div>
+    <span>Day 1: Lower/Core</span>
+  </div>
+  <div class="container">
+    <a href="index.html" class="back-link">&larr; Back to overview</a>
+    <div class="info">
+      <p><strong>Duration:</strong> 50–60 minutes</p>
+      <p><strong>Target muscle groups:</strong> Legs (quads, hamstrings, glutes), calves & core</p>
+      <p><strong>Exercise level:</strong> Slow tempo strength training</p>
+    </div>
+    <!-- Exercise cards layout -->
+    <div class="exercise-cards">
+      <!-- Leg Press -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Leg Press</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Leg Press</span>
+            <span><input type="number" class="weight-input" data-exercise="leg-press" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Feet shoulder‑width; full, controlled depth.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="legPressVideo" type="button">Show Video ▼</button>
+          <div id="legPressVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/3llxjv?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Leg Extension Machine -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Leg Extension Machine<br>Dropset → 50% Load</div>
+          <div class="exercise-metadata">
+            <span>3×8–10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+            <span><input type="number" class="weight-input" data-exercise="leg-extension-machine" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Knees in line with shin.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="legExtensionVideo" type="button">Show Video ▼</button>
+          <div id="legExtensionVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/ht3mfk?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Seated Leg Curl -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Seated Leg Curl<br>Dropset → 50% load</div>
+          <div class="exercise-metadata">
+            <span>3×10–12</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+            <span><input type="number" class="weight-input" data-exercise="seated-leg-curl" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Squeeze hamstrings; slow return.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="legCurlVideo" type="button">Show Video ▼</button>
+          <div id="legCurlVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/qf8vl0?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Smith Machine Squats -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Smith Machine Squats</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>DBs</span>
+            <span><input type="number" class="weight-input" data-exercise="smith-machine-squats" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Short stride if front knee aches; stay tall.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="smithSquatVideo" type="button">Show Video ▼</button>
+          <div id="smithSquatVideo" class="video-container" style="display: none; padding-bottom: 177.778%;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/y0pvfj?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Smith Machine Split Squats -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Smith Machine Split Squats</div>
+          <div class="exercise-metadata">
+            <span>3×8/side</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Cable</span>
+            <span><input type="number" class="weight-input" data-exercise="smith-machine-split-squats" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Pretend you are pushing your foot through the floor.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="smithSplitSquatVideo" type="button">Show Video ▼</button>
+          <div id="smithSplitSquatVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/74m8eb?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Standing Calf Raise -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Standing Calf Raise</div>
+          <div class="exercise-metadata">
+            <span>3×12–15</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine/Smith</span>
+            <span><input type="number" class="weight-input" data-exercise="standing-calf-raise" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Pause at top & bottom.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="standingCalfRaiseVideo" type="button">Show Video ▼</button>
+          <div id="standingCalfRaiseVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/wrh565?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Prone Leg Curl Machine -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Prone Leg Curl Machine</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine</span>
+            <span><input type="number" class="weight-input" data-exercise="prone-leg-curl-machine" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Slowed and controlled; set the pad where your ankle is.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="proneLegCurlVideo" type="button">Show Video ▼</button>
+          <div id="proneLegCurlVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/edhcni?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Hip Abduction/Adduction -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Hip Abduction/Adduction</div>
+          <div class="exercise-metadata">
+            <span>2×12 each side</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine</span>
+            <span><input type="number" class="weight-input" data-exercise="hip-abduction-adduction" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Slowed and controlled; go through your available ROM.</div>
+        <!-- No video for this exercise -->
+      </div>
+    </div>
+    <div class="core-section">
+      <h3>Core</h3>
+      <ul>
+        <li><strong>Sit‑Ups</strong> – 2×25</li>
+        <li><strong>Russian Twists</strong> – 2×20</li>
+        <li><strong>Weighted Crunches</strong> – 2×20</li>
+      </ul>
+    </div>
+    <!-- Rest Timer button that will reveal the timer controls -->
+    <button id="restTimerBtn" class="start-btn" type="button">Rest Timer</button>
+    <!-- Hidden rest timer section that appears when Rest Timer is clicked -->
+    <div id="restTimerSection" class="rest-timer-section">
+      <label for="restDuration">Select rest duration:</label>
+      <div class="timer-input">
+        <input type="range" id="restDuration" min="5" max="90" step="5" value="60" />
+        <span id="restDurationLabel">1:00</span>
+      </div>
+      <button id="startTimerBtn" class="start-btn" type="button">Start</button>
+      <button id="stopTimerBtn" class="start-btn" type="button">Stop</button>
+      <div id="countdownDisplay"></div>
+    </div>
+  </div>
+  <script>
+    // Identify the current day from the URL so we can build proper links and
+    // determine whether a pending action applies to this page.  For example,
+    // when viewing day1.html the value will be "day1".  This variable is
+    // declared outside of any function so that it is available to all
+    // handlers defined later in the script.
+    const currentDay = window.location.pathname.split('/').pop().replace('.html','');
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return m + ':' + (s < 10 ? '0' + s : s);
+    }
+    const restBtn = document.getElementById('restTimerBtn');
+    const restSection = document.getElementById('restTimerSection');
+    const durationInput = document.getElementById('restDuration');
+    const durationLabel = document.getElementById('restDurationLabel');
+    const startBtn = document.getElementById('startTimerBtn');
+    const stopBtn = document.getElementById('stopTimerBtn');
+    const countdownDisplay = document.getElementById('countdownDisplay');
+    let countdownInterval;
+    let seconds;
+    durationLabel.textContent = formatTime(parseInt(durationInput.value));
+    stopBtn.disabled = true;
+    restBtn.addEventListener('click', () => {
+      if (restSection.style.display === 'none' || restSection.style.display === '') {
+        restSection.style.display = 'block';
+      } else {
+        restSection.style.display = 'none';
+      }
+    });
+    durationInput.addEventListener('input', () => {
+      durationLabel.textContent = formatTime(parseInt(durationInput.value));
+    });
+    startBtn.addEventListener('click', () => {
+      if (countdownInterval) clearInterval(countdownInterval);
+      seconds = parseInt(durationInput.value);
+      startBtn.disabled = true;
+      durationInput.disabled = true;
+      restBtn.disabled = true;
+      stopBtn.disabled = false;
+      countdownDisplay.textContent = formatTime(seconds);
+      countdownInterval = setInterval(() => {
+        seconds--;
+        countdownDisplay.textContent = formatTime(seconds);
+        if (seconds <= 0) {
+          clearInterval(countdownInterval);
+          countdownDisplay.textContent = 'Rest over!';
+          startBtn.disabled = false;
+          durationInput.disabled = false;
+          restBtn.disabled = false;
+          stopBtn.disabled = true;
+        }
+      }, 1000);
+    });
+    stopBtn.addEventListener('click', () => {
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownDisplay.textContent = 'Stopped at ' + formatTime(seconds);
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      durationInput.disabled = false;
+      restBtn.disabled = false;
+      durationInput.value = seconds;
+      durationLabel.textContent = formatTime(seconds);
+    });
+    document.querySelectorAll('.toggle-video-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const container = document.getElementById(targetId);
+        if (!container) return;
+        if (container.style.display === 'none' || container.style.display === '') {
+          container.style.display = 'block';
+          this.textContent = this.textContent.replace('Show Video ▼', 'Hide Video ▲');
+        } else {
+          container.style.display = 'none';
+          this.textContent = this.textContent.replace('Hide Video ▲', 'Show Video ▼');
+        }
+      });
+    });
+    (function() {
+      const dayPrefix = 'day1';
+      document.querySelectorAll('.weight-input').forEach(input => {
+        const exercise = input.getAttribute('data-exercise');
+        const key = dayPrefix + '_' + exercise;
+        const stored = localStorage.getItem(key);
+        if (stored !== null) {
+          input.value = stored;
+        }
+        input.addEventListener('input', function() {
+          localStorage.setItem(key, this.value);
+        });
+      });
+    })();
+    // Additional enhancements for exchange and add-exercise buttons
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add exchange icon to each card only once
+      // Compute the day prefix used in link targets (e.g., "day1").  We
+      // intentionally derive this from the currentDay variable rather than
+      // hardcoding it so that the same logic can be reused across pages.
+      const dayPrefixForLinks = currentDay;
+      // Add exchange icon to each card only once, attaching a query string
+      // specifying the day and the index of the card so the library knows
+      // which exercise to replace when "Select" is clicked.
+      const allCards = document.querySelectorAll('.exercise-card, .sports-card');
+      allCards.forEach((card, idx) => {
+        if (!card.querySelector('.exchange-btn')) {
+          const link = document.createElement('a');
+          link.href = `exerciselibrary.html?day=${dayPrefixForLinks}&index=${idx}&mode=exchange`;
+          link.classList.add('exchange-btn');
+          const img = document.createElement('img');
+          // Use the updated exchange icon provided by the user
+          img.src = 'https://i.ibb.co/hFCZkbrM/exerciseiconv1.png';
+          img.alt = 'Exchange';
+          link.appendChild(img);
+          card.appendChild(link);
+        }
+      });
+      // Insert plus button after each exercise-cards container if not already present.
+      document.querySelectorAll('.exercise-cards').forEach(container => {
+        let next = container.nextElementSibling;
+        if (next && next.classList && next.classList.contains('add-exercise-container')) {
+          return;
+        }
+        const addContainer = document.createElement('div');
+        addContainer.classList.add('add-exercise-container');
+        const plus = document.createElement('a');
+        // Link back to the library with only the day parameter (no index) to
+        // indicate that the user wishes to add a brand new exercise to the end.
+        plus.href = `exerciselibrary.html?day=${dayPrefixForLinks}&mode=add`;
+        plus.classList.add('add-exercise-btn');
+        plus.textContent = '+';
+        addContainer.appendChild(plus);
+        if (container.nextSibling) {
+          container.parentNode.insertBefore(addContainer, container.nextSibling);
+        } else {
+          container.parentNode.appendChild(addContainer);
+        }
+      });
+    });
+
+    // ---------------------------------------------------------------------
+    // Handle exercises selected from the Exercise Library
+    //
+    // When the user visits the library via the add/exchange buttons, the
+    // library stores the chosen exercise and desired destination in
+    // localStorage under the "pendingAction" key.  The following
+    // immediately‑invoked function runs on every page load to determine
+    // whether the pending action applies to this page.  If so, it
+    // constructs a new exercise card from the stored data and either
+    // replaces an existing card (in exchange mode) or appends the new
+    // exercise to the end of the list (in add mode).  Event handlers for
+    // weight persistence and video toggling are registered on the new card.
+    (function() {
+      const pendingJSON = localStorage.getItem('pendingAction');
+      if (!pendingJSON) return;
+      let pending;
+      try {
+        pending = JSON.parse(pendingJSON);
+      } catch (e) {
+        console.error('Invalid pendingAction data');
+        return;
+      }
+      if (!pending || !pending.day || pending.day !== currentDay) return;
+      const data = pending.data || {};
+      const index = pending.index;
+      function slugify(str) {
+        return String(str || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
+      const container = document.querySelector('.exercise-cards');
+      if (!container) {
+        // No container to append to; abort and clear pendingAction
+        localStorage.removeItem('pendingAction');
+        return;
+      }
+      // Build the card element
+      const card = document.createElement('div');
+      card.classList.add('exercise-card');
+      // Header containing name and metadata
+      const headerDiv = document.createElement('div');
+      headerDiv.classList.add('exercise-header');
+      const nameDiv = document.createElement('div');
+      nameDiv.classList.add('exercise-name');
+      nameDiv.textContent = data.name || '';
+      headerDiv.appendChild(nameDiv);
+      const metaDiv = document.createElement('div');
+      metaDiv.classList.add('exercise-metadata');
+      // Compose the metadata spans.  If certain fields are missing we
+      // substitute an em dash for clarity.
+      const setsVal = data.sets || '—';
+      const tempoVal = data.tempo || '—';
+      const restVal = data.rest || '—';
+      const equipVal = data.equipment || '—';
+      const exerciseSlug = slugify(data.name);
+      metaDiv.innerHTML =
+        `<span>${setsVal}</span>` +
+        `<span>${tempoVal}</span>` +
+        `<span>${restVal}</span>` +
+        `<span>${equipVal}</span>` +
+        `<span><input type="number" class="weight-input" data-exercise="${exerciseSlug}" min="0" step="0.5"></span>`;
+      headerDiv.appendChild(metaDiv);
+      card.appendChild(headerDiv);
+      // Notes section
+      if (data.notes) {
+        const notesDiv = document.createElement('div');
+        notesDiv.classList.add('exercise-notes');
+        notesDiv.textContent = data.notes;
+        card.appendChild(notesDiv);
+      }
+      // Video section
+      if (data.video) {
+        const videoSection = document.createElement('div');
+        videoSection.classList.add('video-section');
+        const toggleBtn = document.createElement('button');
+        toggleBtn.classList.add('toggle-video-btn');
+        // Create a unique ID for the video container
+        const vidId = 'dynVid_' + Date.now();
+        toggleBtn.setAttribute('data-target', vidId);
+        toggleBtn.textContent = 'Show Video ▼';
+        videoSection.appendChild(toggleBtn);
+        const vidContainer = document.createElement('div');
+        vidContainer.id = vidId;
+        vidContainer.classList.add('video-container');
+        vidContainer.style.display = 'none';
+        vidContainer.innerHTML = `<iframe allow="fullscreen" allowfullscreen src="${data.video}" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>`;
+        videoSection.appendChild(vidContainer);
+        card.appendChild(videoSection);
+      }
+      // Determine whether to replace an existing card or append
+      let targetIndex = null;
+      if (typeof index === 'number' && !isNaN(index) && index >= 0) {
+        targetIndex = index;
+      }
+      if (targetIndex !== null && container.children[targetIndex]) {
+        container.replaceChild(card, container.children[targetIndex]);
+      } else {
+        container.appendChild(card);
+        // If appended, update the index to the new card's position
+        targetIndex = container.children.length - 1;
+      }
+      // Add the exchange icon to the new card with correct query parameters
+      const exch = document.createElement('a');
+      exch.href = `exerciselibrary.html?day=${currentDay}&index=${targetIndex}&mode=exchange`;
+      exch.classList.add('exchange-btn');
+      const exchImg = document.createElement('img');
+      exchImg.src = 'https://i.ibb.co/hFCZkbrM/exerciseiconv1.png';
+      exchImg.alt = 'Exchange';
+      exch.appendChild(exchImg);
+      card.appendChild(exch);
+      // Persist weight input for the new exercise using the same scheme
+      const weightInput = card.querySelector('.weight-input');
+      if (weightInput) {
+        const storageKey = currentDay + '_' + exerciseSlug;
+        const existingVal = localStorage.getItem(storageKey);
+        if (existingVal !== null) {
+          weightInput.value = existingVal;
+        }
+        weightInput.addEventListener('input', function() {
+          localStorage.setItem(storageKey, this.value);
+        });
+      }
+      // Hook up video toggle behaviour for the newly created card
+      const videoToggle = card.querySelector('.toggle-video-btn');
+      if (videoToggle) {
+        videoToggle.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          const cont = document.getElementById(targetId);
+          if (!cont) return;
+          if (cont.style.display === 'none' || cont.style.display === '') {
+            cont.style.display = 'block';
+            this.textContent = this.textContent.replace('Show Video ▼', 'Hide Video ▲');
+          } else {
+            cont.style.display = 'none';
+            this.textContent = this.textContent.replace('Hide Video ▲', 'Show Video ▼');
+          }
+        });
+      }
+      // Remove the pending action so it doesn't apply on subsequent page loads
+      localStorage.removeItem('pendingAction');
+    })();
+  </script>
+  <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+</body>
+</html>
