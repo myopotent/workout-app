@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Check‑In</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /*
+        A dark‑themed glassmorphic weekly check‑in form.
+        This version updates the scale container backgrounds to a dark grey to
+        contrast with the teal accent colour (#039679). The rating scales use a
+        CSS grid layout so that the numeric labels sit directly beneath their
+        corresponding radio buttons. All glassmorphism blur and border
+        treatments are preserved.
+        */
+
+        body {
+            box-sizing: border-box;
+        }
+
+        /* Glassmorphism styles */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-card {
+            /* dark glass card updated to a neutral grey gradient */
+            background: linear-gradient(180deg, rgba(40, 40, 40, 0.6), rgba(30, 30, 30, 0.5));
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Rating scale container */
+        .scale-container {
+            /* subtle dark gradient akin to the new card look */
+            /* use a dark grey gradient to match the new page aesthetic */
+            background: linear-gradient(180deg, rgba(45, 45, 45, 0.7), rgba(35, 35, 35, 0.6));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .scale-radio {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(25px);
+        }
+
+        .scale-radio:hover {
+            transform: scale(1.1);
+            border-color: rgba(3, 150, 121, 0.6);
+            box-shadow: 0 0 20px rgba(3, 150, 121, 0.4);
+        }
+
+        .scale-radio:checked {
+            /* teal gradient when selected */
+            background: linear-gradient(135deg, #039679, #02705a);
+            border-color: #039679;
+            box-shadow: 0 0 25px rgba(3, 150, 121, 0.6);
+        }
+
+        .scale-radio:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .scale-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Centre helper text and convert rating rows to grids for alignment */
+        .scale-container .flex.items-center {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+        }
+
+        .scale-container .flex.items-center input {
+            margin: 0 auto;
+        }
+
+        .scale-container .flex.items-center.mt-2 span {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px rgba(3, 150, 121, 0.5);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dark page background */
+        .animated-bg {
+            /* switch to a neutral grey gradient background */
+            background: linear-gradient(180deg, #2a2a2a 0%, #333333 50%, #2a2a2a 100%);
+        }
+
+        /* Futuristic input styles */
+        .futuristic-input {
+            /* subtle gradient fill similar to card but lighter */
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .futuristic-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .futuristic-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #039679;
+            box-shadow: 0 0 20px rgba(3, 150, 121, 0.3);
+        }
+
+        .futuristic-button {
+            /* green gradient button reminiscent of reference */
+            background: linear-gradient(90deg, #00756c, #00a28d, #00c79a);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+        }
+
+        .futuristic-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 194, 146, 0.4);
+        }
+
+        /* Sticky header bar for the check‑in page.  This bar stays at the
+           top of the viewport on scroll and uses a semi‑transparent
+           background with blur to match the program’s aesthetic. */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            background: rgba(34, 34, 34, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 184, 148, 0.4);
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="animated-bg min-h-screen font-sans">
+    <!-- Sticky header added for consistent navigation.  Display page title here. -->
+    <div class="sticky-header">Weekly Check‑In</div>
+    <div class="container mx-auto px-4 py-8" style="margin-top:4rem;">
+        <div class="max-w-2xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <!-- Header -->
+                <h1 class="text-5xl font-bold text-white mb-2">Weekly Check‑In</h1>
+                <p class="text-white/80 text-lg">Complete your wellness assessment below</p>
+            </div>
+
+            <!-- Check-in Form -->
+            <div class="glass-card rounded-3xl shadow-2xl p-8 fade-in">
+                <form id="checkinForm" class="space-y-8">
+                    <!-- Personal Information -->
+                    <div>
+                        <label for="fullName" class="block text-sm font-semibold text-white/90 mb-3">Name</label>
+                        <input type="text" id="fullName" name="fullName" required
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300"
+                            placeholder="Enter your full name">
+                    </div>
+
+                    <!-- Removed email field; this form only captures the participant's name. -->
+
+                    <!-- Date Information -->
+                    <div>
+                        <label for="todaysDate" class="block text-sm font-semibold text-white/90 mb-3">Today's Date</label>
+                        <input type="date" id="todaysDate" name="todaysDate" required readonly
+                            class="futuristic-input w-full px-4 py-3 rounded-xl text-white/80">
+                    </div>
+
+                    <!-- Weight Information -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="previousWeight" class="block text-sm font-semibold text-white/90 mb-3">Previous Weight (lbs)</label>
+                            <input type="number" id="previousWeight" name="previousWeight" step="0.1" min="0"
+                                class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300"
+                                placeholder="Previous weight">
+                        </div>
+                        <div>
+                            <label for="currentWeight" class="block text-sm font-semibold text-white/90 mb-3">Current Weight (lbs)</label>
+                            <input type="number" id="currentWeight" name="currentWeight" step="0.1" min="0" required
+                                class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300"
+                                placeholder="Current weight">
+                        </div>
+                    </div>
+
+                    <!-- Weekly Reflection -->
+                    <div>
+                        <label for="struggles" class="block text-sm font-semibold text-white/90 mb-3">Weekly Struggles</label>
+                        <textarea id="struggles" name="struggles" rows="3"
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 resize-none"
+                            placeholder="Share any challenges you faced this week..."></textarea>
+                    </div>
+
+                    <!-- Energy Level -->
+                    <div class="scale-container">
+                        <label class="block text-lg font-bold text-white mb-6 text-center">Energy Level</label>
+                        <!-- descriptive range labels -->
+                        <div class="flex justify-between text-sm text-white/70 mb-4 px-4">
+                            <span class="scale-label text-center">Low Energy</span>
+                            <span class="scale-label text-center">High Energy</span>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="energy1" name="energyLevel" value="1" required class="scale-radio">
+                            <input type="radio" id="energy2" name="energyLevel" value="2" class="scale-radio">
+                            <input type="radio" id="energy3" name="energyLevel" value="3" class="scale-radio">
+                            <input type="radio" id="energy4" name="energyLevel" value="4" class="scale-radio">
+                            <input type="radio" id="energy5" name="energyLevel" value="5" class="scale-radio">
+                            <input type="radio" id="energy6" name="energyLevel" value="6" class="scale-radio">
+                            <input type="radio" id="energy7" name="energyLevel" value="7" class="scale-radio">
+                            <input type="radio" id="energy8" name="energyLevel" value="8" class="scale-radio">
+                            <input type="radio" id="energy9" name="energyLevel" value="9" class="scale-radio">
+                            <input type="radio" id="energy10" name="energyLevel" value="10" class="scale-radio">
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <span class="text-xs text-white/60 font-medium">1</span>
+                            <span class="text-xs text-white/60 font-medium">2</span>
+                            <span class="text-xs text-white/60 font-medium">3</span>
+                            <span class="text-xs text-white/60 font-medium">4</span>
+                            <span class="text-xs text-white/60 font-medium">5</span>
+                            <span class="text-xs text-white/60 font-medium">6</span>
+                            <span class="text-xs text-white/60 font-medium">7</span>
+                            <span class="text-xs text-white/60 font-medium">8</span>
+                            <span class="text-xs text-white/60 font-medium">9</span>
+                            <span class="text-xs text-white/60 font-medium">10</span>
+                        </div>
+                    </div>
+
+                    <!-- Stress Level -->
+                    <div class="scale-container">
+                        <label class="block text-lg font-bold text-white mb-6 text-center">Stress Level</label>
+                        <!-- descriptive range labels -->
+                        <div class="flex justify-between text-sm text-white/70 mb-4 px-4">
+                            <span class="scale-label text-center">Low Stress</span>
+                            <span class="scale-label text-center">High Stress</span>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="stress1" name="stressLevel" value="1" required class="scale-radio">
+                            <input type="radio" id="stress2" name="stressLevel" value="2" class="scale-radio">
+                            <input type="radio" id="stress3" name="stressLevel" value="3" class="scale-radio">
+                            <input type="radio" id="stress4" name="stressLevel" value="4" class="scale-radio">
+                            <input type="radio" id="stress5" name="stressLevel" value="5" class="scale-radio">
+                            <input type="radio" id="stress6" name="stressLevel" value="6" class="scale-radio">
+                            <input type="radio" id="stress7" name="stressLevel" value="7" class="scale-radio">
+                            <input type="radio" id="stress8" name="stressLevel" value="8" class="scale-radio">
+                            <input type="radio" id="stress9" name="stressLevel" value="9" class="scale-radio">
+                            <input type="radio" id="stress10" name="stressLevel" value="10" class="scale-radio">
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <span class="text-xs text-white/60 font-medium">1</span>
+                            <span class="text-xs text-white/60 font-medium">2</span>
+                            <span class="text-xs text-white/60 font-medium">3</span>
+                            <span class="text-xs text-white/60 font-medium">4</span>
+                            <span class="text-xs text-white/60 font-medium">5</span>
+                            <span class="text-xs text-white/60 font-medium">6</span>
+                            <span class="text-xs text-white/60 font-medium">7</span>
+                            <span class="text-xs text-white/60 font-medium">8</span>
+                            <span class="text-xs text-white/60 font-medium">9</span>
+                            <span class="text-xs text-white/60 font-medium">10</span>
+                        </div>
+                    </div>
+
+                    <!-- Sleep Quality -->
+                    <div class="scale-container">
+                        <label class="block text-lg font-bold text-white mb-6 text-center">Sleep Quality</label>
+                        <!-- descriptive range labels -->
+                        <div class="flex justify-between text-sm text-white/70 mb-4 px-4">
+                            <span class="scale-label text-center">Poor Sleep</span>
+                            <span class="scale-label text-center">Great Sleep</span>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="sleep1" name="sleepQuality" value="1" required class="scale-radio">
+                            <input type="radio" id="sleep2" name="sleepQuality" value="2" class="scale-radio">
+                            <input type="radio" id="sleep3" name="sleepQuality" value="3" class="scale-radio">
+                            <input type="radio" id="sleep4" name="sleepQuality" value="4" class="scale-radio">
+                            <input type="radio" id="sleep5" name="sleepQuality" value="5" class="scale-radio">
+                            <input type="radio" id="sleep6" name="sleepQuality" value="6" class="scale-radio">
+                            <input type="radio" id="sleep7" name="sleepQuality" value="7" class="scale-radio">
+                            <input type="radio" id="sleep8" name="sleepQuality" value="8" class="scale-radio">
+                            <input type="radio" id="sleep9" name="sleepQuality" value="9" class="scale-radio">
+                            <input type="radio" id="sleep10" name="sleepQuality" value="10" class="scale-radio">
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <span class="text-xs text-white/60 font-medium">1</span>
+                            <span class="text-xs text-white/60 font-medium">2</span>
+                            <span class="text-xs text-white/60 font-medium">3</span>
+                            <span class="text-xs text-white/60 font-medium">4</span>
+                            <span class="text-xs text-white/60 font-medium">5</span>
+                            <span class="text-xs text-white/60 font-medium">6</span>
+                            <span class="text-xs text-white/60 font-medium">7</span>
+                            <span class="text-xs text-white/60 font-medium">8</span>
+                            <span class="text-xs text-white/60 font-medium">9</span>
+                            <span class="text-xs text-white/60 font-medium">10</span>
+                        </div>
+                    </div>
+
+                    <!-- Workouts Completed -->
+                    <div>
+                        <label for="workoutsCompleted" class="block text-sm font-semibold text-white/90 mb-3">Workouts Completed</label>
+                        <select id="workoutsCompleted" name="workoutsCompleted" required
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-black">
+                            <option value="">Select number</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div>
+                        <label for="specialRequests" class="block text-sm font-semibold text-white/90 mb-3">Additional Notes</label>
+                        <textarea id="specialRequests" name="specialRequests" rows="3"
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 resize-none"
+                            placeholder="Any additional notes or comments..."></textarea>
+                    </div>
+
+                    <!-- Progress Photos Upload -->
+                    <div class="pt-6">
+                        <label class="block text-lg font-bold text-white mb-3">Progress Photos</label>
+                        <p class="text-xs text-white/70 mb-4">Upload your progress photos. Use the dropdown to choose which view (front, side, or back) you're capturing, then tap the upload button. A preview for each photo will appear below.</p>
+                        <!-- Photo type selector -->
+                        <div class="mb-4">
+                            <label for="photoType" class="block text-sm text-white/80 mb-2">Photo Type</label>
+                            <select id="photoType" class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-black">
+                                <option value="">Select type</option>
+                                <option value="front">Front</option>
+                                <option value="side">Side</option>
+                                <option value="back">Back</option>
+                            </select>
+                        </div>
+                        <!-- File input and button -->
+                        <div class="mb-4">
+                            <!-- Removed the `capture` attribute so users can choose images from their photo library -->
+                            <input type="file" id="photoInput" accept="image/*" class="hidden" />
+                            <label id="photoInputLabel" for="photoInput" class="futuristic-button w-full text-white font-semibold py-3 px-6 rounded-xl cursor-pointer block text-center">Upload Photo</label>
+                            <p id="photoHelp" class="hidden text-xs text-red-500 mt-2">Please select a photo type before uploading.</p>
+                        </div>
+                        <!-- Preview boxes for each photo -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Front Preview -->
+                            <div class="preview-box flex flex-col items-center justify-center bg-gray-800/40 border-2 border-dashed border-teal-500 rounded-xl h-48 p-4">
+                                <span class="text-sm text-white/80 mb-2">Front</span>
+                                <img id="frontPreview" class="hidden object-cover rounded-xl h-full w-full" alt="Front Preview">
+                                <span id="frontPlaceholder" class="text-xs text-white/50">No photo uploaded</span>
+                            </div>
+                            <!-- Side Preview -->
+                            <div class="preview-box flex flex-col items-center justify-center bg-gray-800/40 border-2 border-dashed border-teal-500 rounded-xl h-48 p-4">
+                                <span class="text-sm text-white/80 mb-2">Side</span>
+                                <img id="sidePreview" class="hidden object-cover rounded-xl h-full w-full" alt="Side Preview">
+                                <span id="sidePlaceholder" class="text-xs text-white/50">No photo uploaded</span>
+                            </div>
+                            <!-- Back Preview -->
+                            <div class="preview-box flex flex-col items-center justify-center bg-gray-800/40 border-2 border-dashed border-teal-500 rounded-xl h-48 p-4">
+                                <span class="text-sm text-white/80 mb-2">Back</span>
+                                <img id="backPreview" class="hidden object-cover rounded-xl h-full w-full" alt="Back Preview">
+                                <span id="backPlaceholder" class="text-xs text-white/50">No photo uploaded</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-6">
+                        <button type="submit"
+                            class="futuristic-button w-full text-white font-bold py-4 px-6 rounded-xl transition-all duration-300">
+                            Complete Check-In
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden glass-card rounded-3xl p-6 mt-6 fade-in">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-semibold text-white">Check-in Successful!</h3>
+                        <p class="text-white/80 mt-1">Your wellness data has been recorded. Thank you for checking in!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('todaysDate');
+            if (dateInput) {
+                dateInput.valueAsDate = new Date();
+            }
+        });
+
+        // Handle form submission
+        // Define separate Zapier webhook URLs: one for check‑in information (INFO)
+        // and one for progress photos (PHOTO). The INFO webhook should be
+        // configured to store textual data (name, weights, ratings, notes) into
+        // your Check‑Ins destination (e.g. Google Sheets or Drive), while the
+        // PHOTO webhook handles image uploads.
+        const INFO_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/23899032/u5363ao/';
+        const PHOTO_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/23899032/u536jq6/';
+
+        // Utility function to convert a File object to a Base64 data URL.  This
+        // allows us to send image content through a JSON payload.  Zapier can
+        // decode this data later and store the files in Google Drive.
+        function convertToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Maintain an object to hold the selected photos by type (front, side, back).
+        const photos = { front: null, side: null, back: null };
+
+        const photoTypeSelect = document.getElementById('photoType');
+        const photoInput = document.getElementById('photoInput');
+        const photoLabel = document.getElementById('photoInputLabel');
+        const photoHelp = document.getElementById('photoHelp');
+
+        // When the upload label is clicked, check that a photo type has been selected.
+        // If not, display an error message and prevent the file picker from opening.
+        if (photoLabel) {
+            photoLabel.addEventListener('click', function(e) {
+                if (!photoTypeSelect || !photoTypeSelect.value) {
+                    if (photoHelp) photoHelp.classList.remove('hidden');
+                    e.preventDefault();
+                } else {
+                    if (photoHelp) photoHelp.classList.add('hidden');
+                }
+            });
+        }
+
+        // Handle file selection; store the file under the appropriate type and update previews.
+        if (photoInput) {
+            photoInput.addEventListener('change', function() {
+                if (!photoTypeSelect || !photoTypeSelect.value) {
+                    return;
+                }
+                const type = photoTypeSelect.value;
+                const file = this.files && this.files[0];
+                if (file) {
+                    photos[type] = file;
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const img = document.getElementById(type + 'Preview');
+                        const placeholder = document.getElementById(type + 'Placeholder');
+                        if (img) {
+                            img.src = ev.target.result;
+                            img.classList.remove('hidden');
+                        }
+                        if (placeholder) placeholder.classList.add('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        document.getElementById('checkinForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            // Validate required fields
+            const requiredFields = ['fullName', 'currentWeight', 'stressLevel', 'workoutsCompleted', 'energyLevel', 'sleepQuality'];
+            for (const field of requiredFields) {
+                if (!formData.get(field)) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+            }
+
+            // Locate the submit button and update its appearance
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Submitting...';
+            submitButton.disabled = true;
+
+            // Convert FormData into a plain object for serialization
+            const payload = {};
+            formData.forEach((value, key) => {
+                payload[key] = value;
+            });
+
+            // If any progress photos were provided via the dropdown/upload mechanism,
+            // convert them to base64 and include them in the payload.  The keys
+            // frontPhotoName/frontPhotoData, sidePhotoName/sidePhotoData and
+            // backPhotoName/backPhotoData will be appended dynamically.
+            const photoKeys = ['front', 'side', 'back'];
+            for (const key of photoKeys) {
+                const file = photos[key];
+                if (file) {
+                    try {
+                        payload[key + 'PhotoName'] = file.name;
+                        payload[key + 'PhotoData'] = await convertToBase64(file);
+                    } catch (err) {
+                        console.error('Error converting ' + key + ' photo to base64:', err);
+                    }
+                }
+            }
+
+            // Split the payload into two: one for the check‑in data (without photo
+            // fields) and another for the photos (with only photo fields).  This
+            // separation allows separate Zaps to handle spreadsheet updates and
+            // file uploads.
+            const infoPayload = {};
+            const photoPayload = {};
+            Object.keys(payload).forEach(key => {
+                // Photo fields end with 'PhotoName' or 'PhotoData'. Anything else
+                // should go to the info payload.
+                if (key.endsWith('PhotoName') || key.endsWith('PhotoData')) {
+                    photoPayload[key] = payload[key];
+                } else {
+                    infoPayload[key] = payload[key];
+                }
+            });
+
+            // Always include an identifier (e.g. fullName and date) in the photo
+            // payload so that the Zap knows which photos belong to which check‑in.
+            if (infoPayload.fullName) photoPayload.fullName = infoPayload.fullName;
+            if (infoPayload.todaysDate) photoPayload.todaysDate = infoPayload.todaysDate;
+
+            // Prepare requests for info and photos. Only send the photo webhook
+            // request if there are any photos attached.
+            const requests = [];
+            // Send core check‑in info to the INFO webhook
+            requests.push(fetch(INFO_WEBHOOK_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(infoPayload)
+            }));
+            // Send photos separately if present
+            if (Object.keys(photoPayload).some(k => k.endsWith('PhotoData'))) {
+                requests.push(fetch(PHOTO_WEBHOOK_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(photoPayload)
+                }));
+            }
+
+            Promise.allSettled(requests).then(() => {
+                // Hide the form and show the success message
+                this.parentElement.style.display = 'none';
+                document.getElementById('successMessage').classList.remove('hidden');
+            }).catch(error => {
+                alert('There was an error submitting the form: ' + error.message);
+            }).finally(() => {
+                // Reset the button state after submission
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            });
+        });
+
+        // Add glow effects on focus
+        const inputs = document.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.boxShadow = '0 0 25px rgba(3, 150, 121, 0.4)';
+            });
+            input.addEventListener('blur', function() {
+                this.style.boxShadow = '';
+            });
+        });
+    </script>
+</body>
+</html>
