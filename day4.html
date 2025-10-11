@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 4: Upper Push/Pull</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+    .header {
+      background-color: #222;
+      color: #fff;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      border-bottom: 1px solid #333;
+    }
+
+    /* Wrapper to constrain the embedded Imgur logo for the header */
+    .logo-wrapper {
+      width: 36px;
+      height: 36px;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .logo-wrapper .imgur-embed-pub {
+      width: 100%;
+      height: 100%;
+    }
+    .container {
+      max-width: 650px;
+      margin: 1rem auto;
+      /* Semi-transparent dark glass background */
+      background-color: rgba(17, 17, 17, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.03),
+                  inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+                  /* Softer outer shadow to match Day 2 styling */
+                  0 2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      padding: 1.25rem;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.02),
+        rgba(0, 0, 0, 0.35)
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+    .info p {
+      margin: 0.5rem 0;
+      line-height: 1.4;
+      color: #ccc;
+    }
+    .info strong {
+      display: inline-block;
+      min-width: 120px;
+      color: #fff;
+    }
+    .exercises {
+      margin-top: 1.5rem;
+    }
+    /* ------------------------------------------------------------------ */
+    /* Card layout styles for the upper push/pull workout (Day 4)         */
+    /* Each exercise is displayed as a separate card for clarity and a    */
+    /* modern appearance. Supersets are shown as their own card between  */
+    /* exercise cards.                                                    */
+    /* ------------------------------------------------------------------ */
+    .exercise-cards {
+      margin-top: 1.5rem;
+    }
+    .exercise-card {
+      /* Modern card styling with gradient and subtle glass effect */
+      background: #0c0f12;
+      background: linear-gradient(135deg, #0c0f12 0%, #151a20 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 120px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0.8;
+      transition: background-color 0.3s ease;
+    }
+
+    .exercise-card:hover {
+      background-color: #14181d;
+    }
+
+    .exercise-card::before {
+      content: '';
+      position: absolute;
+      bottom: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(0, 184, 148, 0.4) 0%, rgba(0, 184, 148, 0.2) 40%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(20px);
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .superset-card {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #00b894;
+      font-weight: bold;
+      font-size: 0.85rem;
+      text-shadow: 0 0 6px rgba(0, 184, 148, 0.75);
+    }
+    .exercise-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .exercise-name {
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: #fff;
+      margin-right: 0.5rem;
+      flex: 1 1 auto;
+    }
+    .exercise-metadata {
+      display: flex;
+      /* Keep metadata on a single line when possible by shrinking its scale */
+      flex-wrap: nowrap;
+      gap: 12px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.7);
+      align-items: center;
+      transform: scale(0.8);
+      transform-origin: right center;
+    }
+    .exercise-metadata input.weight-input {
+      margin: 0;
+    }
+    .exercise-notes {
+      margin-top: 0.5rem;
+      font-size: 0.6rem;
+      /* Use a beige tone at 75% opacity for notes */
+      color: rgba(218, 216, 201, 0.75);
+      font-weight: normal;
+    }
+    .video-section {
+      margin-top: 0.5rem;
+    }
+    /* Styling for weight input fields */
+    .weight-input {
+      /* Reduce weight input width to match Day 2 */
+      width: 60px;
+      padding: 0.25rem 0.4rem;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background-color: #333;
+      color: #fff;
+      font-size: 0.7rem;
+      box-sizing: border-box;
+    }
+    /* Toggle button for showing/hiding video clips */
+    .toggle-video-btn {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      background-color: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      /* Smooth background-color transition only */
+      transition: background-color 0.2s ease;
+    }
+    .toggle-video-btn:hover {
+      background-color: #008f73;
+    }
+    /* Video container styling */
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      background-color: #000;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Exchange and add-exercise button styling */
+    .exchange-btn {
+      position: absolute;
+      /* Position the exchange button in the bottom‑right corner instead of the top. */
+      bottom: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+    .exchange-btn img {
+      width: 100%;
+      height: 100%;
+    }
+    .add-exercise-container {
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+    .add-exercise-btn {
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      background-color: #00b894;
+      color: #111;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .add-exercise-btn:hover {
+      background-color: #008f73;
+      color: #111;
+    }
+
+    /* Workout table styles for strength workouts */
+    .workout-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+      /* Use automatic table layout so columns size based on content */
+      table-layout: auto;
+    }
+    .workout-table th,
+    .workout-table td {
+      padding: 0.5rem;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid #333;
+    }
+    .workout-table th {
+      color: #00b894;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    .workout-table td {
+      color: #ccc;
+      font-size: 0.85rem;
+    }
+    .workout-table tr:nth-child(even) {
+      background-color: #1a1a1a;
+    }
+    .workout-table tr:nth-child(odd) {
+      background-color: #222;
+    }
+    .workout-table tr:hover {
+      background-color: #2d2d2d;
+    }
+    /* Emphasize exercise names */
+    .workout-table td:first-child {
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    /* Fixed width for weight column */
+    .workout-table th:last-child,
+    .workout-table td:last-child {
+      width: 80px;
+    }
+    /* Explicit column widths to help notes wrap sooner and reduce row length */
+    .workout-table th:nth-child(1),
+    .workout-table td:nth-child(1) {
+      width: 24%;
+    }
+    .workout-table th:nth-child(2),
+    .workout-table td:nth-child(2) {
+      width: 12%;
+    }
+    .workout-table th:nth-child(3),
+    .workout-table td:nth-child(3) {
+      width: 10%;
+    }
+    .workout-table th:nth-child(4),
+    .workout-table td:nth-child(4) {
+      width: 8%;
+    }
+    .workout-table th:nth-child(5),
+    .workout-table td:nth-child(5) {
+      width: 16%;
+    }
+    .workout-table th:nth-child(6),
+    .workout-table td:nth-child(6) {
+      /* Widen the notes column slightly so long descriptions wrap less and rows stay shorter */
+      width: 30%;
+      word-wrap: break-word;
+      /* Modest font size for readability while conserving space */
+      font-size: 0.7rem;
+      line-height: 1.2;
+      /* Balance vertical padding to avoid overly tall rows */
+      padding-top: 0.4rem;
+      padding-bottom: 0.4rem;
+    }
+    /* Style for the Superset indicator rows */
+    .superset-row td {
+      text-align: center;
+      color: #00b894;
+      font-weight: bold;
+      text-shadow: 0 0 6px rgba(0, 184, 148, 0.75);
+    }
+    /* Styling for note rows that appear underneath each exercise */
+    .note-row td {
+      /* Use a beige tone (#DAD8C9) at 75% opacity for notes */
+      color: rgba(218, 216, 201, 0.75);
+      /* Make the note text smaller */
+      font-size: 0.6rem;
+      /* Ensure notes are not bold */
+      font-weight: normal;
+      padding: 0.4rem 0.5rem;
+      border-bottom: 1px solid #333;
+    }
+    /* Ensure primary exercise rows maintain a consistent height to match the image size */
+    .exercise-row td {
+      height: 70px;
+      vertical-align: top;
+    }
+    /* Align the Show Video button cell to the left under the exercise column */
+    .video-row td:first-child {
+      text-align: left;
+      padding-left: 0;
+    }
+
+    /* Reduce the size and weight of description cells (all columns except the exercise name) */
+    .workout-table td:not(:first-child) {
+      /* Ensure the description is not bold */
+      font-weight: normal;
+    }
+
+    /* Toggle button for showing/hiding video clips */
+    .toggle-video-btn {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      background-color: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .toggle-video-btn:hover {
+      background-color: #008f73;
+    }
+    /* Video container styling for embedded exercise clips */
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      background-color: #000;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Style for weight input fields */
+    .weight-input {
+      width: 80px;
+      padding: 4px;
+      background-color: #333;
+      border: 1px solid #444;
+      color: #fff;
+      border-radius: 4px;
+    }
+    .weight-input:focus {
+      outline: none;
+      border-color: #00b894;
+    }
+    .start-btn {
+      display: block;
+      width: 100%;
+      background-color: #00b894;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      padding: 0.75rem 0;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-top: 2rem;
+      transition: background-color 0.2s ease;
+    }
+    .start-btn:hover {
+      background-color: #008f73;
+    }
+    .back-link {
+      display: block;
+      color: #00b894;
+      text-decoration: none;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    /* Rest timer section styling */
+    .rest-timer-section {
+      display: none;
+      margin-top: 1.5rem;
+      background-color: #1b1b1b;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .rest-timer-section label {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    .rest-timer-section .timer-input {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.5rem 0 1rem;
+    }
+    .rest-timer-section input[type="range"] {
+      flex: 1;
+      appearance: none;
+      height: 4px;
+      background: #333;
+      outline: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .rest-timer-section input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #00b894;
+      cursor: pointer;
+    }
+    .rest-timer-section input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #00b894;
+      border: none;
+      cursor: pointer;
+    }
+    #restDurationLabel {
+      color: #fff;
+      font-size: 1rem;
+      min-width: 3rem;
+      text-align: center;
+    }
+    #countdownDisplay {
+      margin-top: 0.75rem;
+      font-size: 1.2rem;
+      color: #00b894;
+      font-weight: bold;
+      min-height: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-wrapper">
+      <blockquote class="imgur-embed-pub" lang="en" data-id="a/VsGUO3p" data-context="false"><a href="//imgur.com/a/VsGUO3p"></a></blockquote>
+    </div>
+    <span>Day 4: Upper Push/Pull</span>
+  </div>
+  <div class="container">
+    <!-- Back to overview: replaced text link with image-based back button -->
+    <a href="index.html" class="back-link" title="Back to overview" onclick="window.location.href='index.html';">
+      <img src="https://i.ibb.co/C3nTYV5T/Back-Buttonv2.png" alt="Back to overview" style="width:32px;height:32px;">
+    </a>
+    <div class="info">
+      <p><strong>Duration:</strong> 60 minutes</p>
+      <p><strong>Target muscle groups:</strong> Upper body (chest, shoulders, triceps, back, biceps)</p>
+      <p><strong>Exercise level:</strong> Moderate intensity</p>
+    </div>
+    <!-- Exercise cards layout for Day 4 -->
+    <div class="exercise-cards">
+      <!-- Warm-Up -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Warm‑Up</div>
+          <div class="exercise-metadata">
+            <span>—</span>
+            <span>Slow</span>
+            <span>—</span>
+            <span>—</span>
+            <span><input type="number" class="weight-input" data-exercise="warm-up" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Get blood flowing to the joints and muscles.</div>
+      </div>
+      <!-- Chest Press -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Chest Press</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+            <span><input type="number" class="weight-input" data-exercise="chest-press" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Stick chest up and start with shoulder blades protracted and arms out straight. Then, only go back as far as you can that feels comfortable.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="chestPressVideo" type="button">Show Video ▼</button>
+          <div id="chestPressVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/wdqfiy?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Superset indicator -->
+      <div class="superset-card">↑ Superset ↓</div>
+      <!-- Tricep Extensions (Cables/EZ bar) -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Tricep Extensions</div>
+          <div class="exercise-metadata">
+            <span>3×14</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Cables/EZ bar</span>
+            <span><input type="number" class="weight-input" data-exercise="tricep-extensions" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Make sure you are squeezing your shoulder blades back to pull more with triceps and to lock the shoulder into place.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="tricepExtensionsVideo1" type="button">Show Video ▼</button>
+          <div id="tricepExtensionsVideo1" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/xnn0o5?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Incline Bench Press -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Incline Bench Press</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine/DBs</span>
+            <span><input type="number" class="weight-input" data-exercise="incline-bench-press" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Go as low as you need to go to feel the lengthening of the muscle. If you start feeling anything in the shoulder, do not go lower than that.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="inclineBenchPressVideo" type="button">Show Video ▼</button>
+          <div id="inclineBenchPressVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/np4w3d?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Lateral Raise -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Lateral Raise</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Slow</span>
+            <span>45 s</span>
+            <span>Machine</span>
+            <span><input type="number" class="weight-input" data-exercise="lateral-raise" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Raise the weights in a controlled manner, and only go up to about where your nose is. Set the seat to where your shoulders are in line with the weight.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="lateralRaiseVideo" type="button">Show Video ▼</button>
+          <div id="lateralRaiseVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/nnml0w?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Lat Pulldowns -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Lat Pulldowns</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine/Cable</span>
+            <span><input type="number" class="weight-input" data-exercise="lat-pulldowns" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Ensure your shoulder blades are moving up and down but do NOT shrug. Lean back a little for extra lat activation.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="latPulldownsVideo" type="button">Show Video ▼</button>
+          <div id="latPulldownsVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/kc6o6q?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Superset indicator -->
+      <div class="superset-card">↑ Superset ↓</div>
+      <!-- Curls -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Curls</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>Normal</span>
+            <span>30 s</span>
+            <span>DBs</span>
+            <span><input type="number" class="weight-input" data-exercise="curls" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Slowed and controlled; make sure your chest is up and tall.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="curlsVideo" type="button">Show Video ▼</button>
+          <div id="curlsVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/r9izbr?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Rows -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Rows</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Machine/Cable</span>
+            <span><input type="number" class="weight-input" data-exercise="rows" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Shoulder blades retracting and protracting. Pretend you are squeezing a pencil between your shoulder blades.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="rowsVideo" type="button">Show Video ▼</button>
+          <div id="rowsVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/57wg9o?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Superset indicator -->
+      <div class="superset-card">↑ Superset ↓</div>
+      <!-- Hammer Curls -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Hammer Curls</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>2‑1‑2</span>
+            <span>30 s</span>
+            <span>DB</span>
+            <span><input type="number" class="weight-input" data-exercise="hammer-curls" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Neutral grip.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="hammerCurlsVideo" type="button">Show Video ▼</button>
+          <div id="hammerCurlsVideo" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/4k8b9v?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Tricep Extensions (rope) -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Tricep Extensions</div>
+          <div class="exercise-metadata">
+            <span>3×12</span>
+            <span>Slow</span>
+            <span>30 s</span>
+            <span>Cables/Rope</span>
+            <span><input type="number" class="weight-input" data-exercise="tricep-extensions-rope" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Make sure you are squeezing your shoulder blades back to pull more with triceps and to lock the shoulder into place.</div>
+        <div class="video-section">
+          <button class="toggle-video-btn" data-target="tricepExtensionsVideo2" type="button">Show Video ▼</button>
+          <div id="tricepExtensionsVideo2" class="video-container" style="display: none;">
+            <iframe allow="fullscreen" allowfullscreen src="https://streamable.com/e/s1mfa6?nocontrols=1" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+      <!-- Superset indicator -->
+      <div class="superset-card">↑ Superset ↓</div>
+      <!-- Cable Curls -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-name">Cable Curls</div>
+          <div class="exercise-metadata">
+            <span>3×10</span>
+            <span>3‑1‑3</span>
+            <span>30 s</span>
+            <span>Rope</span>
+            <span><input type="number" class="weight-input" data-exercise="cable-curls" min="0" step="0.5"></span>
+          </div>
+        </div>
+        <div class="exercise-notes">Go through full ROM; you can stand in a staggered stance for extra balance.</div>
+      </div>
+    </div>
+    <!-- Rest Timer button -->
+    <button id="restTimerBtn" class="start-btn" type="button">Rest Timer</button>
+    <!-- Rest timer section (hidden by default) -->
+    <div id="restTimerSection" class="rest-timer-section">
+      <label for="restDuration">Select rest duration:</label>
+      <div class="timer-input">
+        <input type="range" id="restDuration" min="5" max="90" step="5" value="60" />
+        <span id="restDurationLabel">1:00</span>
+      </div>
+      <button id="startTimerBtn" class="start-btn" type="button">Start</button>
+      <button id="stopTimerBtn" class="start-btn" type="button">Stop</button>
+      <div id="countdownDisplay"></div>
+    </div>
+  </div>
+  <script>
+    // Determine which day page is loaded based on the URL.  This value
+    // (e.g., "day4") will be used when constructing links back to the
+    // Exercise Library and when processing pending selections.
+    const currentDay = window.location.pathname.split('/').pop().replace('.html','');
+
+    // Function to format seconds into mm:ss
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return m + ':' + (s < 10 ? '0' + s : s);
+    }
+    const restBtn = document.getElementById('restTimerBtn');
+    const restSection = document.getElementById('restTimerSection');
+    const durationInput = document.getElementById('restDuration');
+    const durationLabel = document.getElementById('restDurationLabel');
+    const startBtn = document.getElementById('startTimerBtn');
+    const stopBtn = document.getElementById('stopTimerBtn');
+    const countdownDisplay = document.getElementById('countdownDisplay');
+    let countdownInterval;
+    let seconds;
+    // Initialize label
+    durationLabel.textContent = formatTime(parseInt(durationInput.value));
+    // Initially disable stop button
+    stopBtn.disabled = true;
+    // Toggle visibility of rest timer section
+    restBtn.addEventListener('click', () => {
+      if (restSection.style.display === 'none' || restSection.style.display === '') {
+        restSection.style.display = 'block';
+      } else {
+        restSection.style.display = 'none';
+      }
+    });
+    // Update label when slider moves
+    durationInput.addEventListener('input', () => {
+      durationLabel.textContent = formatTime(parseInt(durationInput.value));
+    });
+    // Start timer
+    startBtn.addEventListener('click', () => {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+      seconds = parseInt(durationInput.value);
+      startBtn.disabled = true;
+      durationInput.disabled = true;
+      restBtn.disabled = true;
+      stopBtn.disabled = false;
+      countdownDisplay.textContent = formatTime(seconds);
+      countdownInterval = setInterval(() => {
+        seconds--;
+        countdownDisplay.textContent = formatTime(seconds);
+        if (seconds <= 0) {
+          clearInterval(countdownInterval);
+          countdownDisplay.textContent = 'Rest over!';
+          startBtn.disabled = false;
+          durationInput.disabled = false;
+          restBtn.disabled = false;
+          stopBtn.disabled = true;
+        }
+      }, 1000);
+    });
+    // Stop timer
+    stopBtn.addEventListener('click', () => {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+      countdownDisplay.textContent = 'Stopped at ' + formatTime(seconds);
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      durationInput.disabled = false;
+      restBtn.disabled = false;
+      durationInput.value = seconds;
+      durationLabel.textContent = formatTime(seconds);
+    });
+  </script>
+
+  <!-- Persist weight inputs using localStorage -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const weightInputs = document.querySelectorAll('.weight-input');
+      weightInputs.forEach(function(input) {
+        const key = 'day4_' + input.dataset.exercise;
+        const savedValue = localStorage.getItem(key);
+        if (savedValue !== null) {
+          input.value = savedValue;
+        }
+        input.addEventListener('input', function() {
+          localStorage.setItem(key, input.value);
+        });
+      });
+    });
+  </script>
+
+  <!-- Toggle show/hide for exercise videos -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const videoButtons = document.querySelectorAll('.toggle-video-btn');
+      videoButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const targetId = btn.getAttribute('data-target');
+          const container = document.getElementById(targetId);
+          if (!container) return;
+          const isHidden = container.style.display === 'none' || container.style.display === '';
+          container.style.display = isHidden ? 'block' : 'none';
+          btn.textContent = isHidden ? 'Hide Video ▲' : 'Show Video ▼';
+        });
+      });
+    });
+  </script>
+
+  <!-- Exchange and add‑exercise buttons -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Determine the day prefix based on the loaded page (e.g., "day4")
+      const dayPrefixForLinks = currentDay;
+      // Add exchange icon to each card only once, adding query parameters to
+      // specify which card index to replace when returning from the library
+      const cards = document.querySelectorAll('.exercise-card, .sports-card');
+      cards.forEach(function(card, idx) {
+        if (!card.querySelector('.exchange-btn')) {
+          const link = document.createElement('a');
+          link.href = `exerciselibrary.html?day=${dayPrefixForLinks}&index=${idx}&mode=exchange`;
+          link.classList.add('exchange-btn');
+          const img = document.createElement('img');
+          img.src = 'https://i.ibb.co/hFCZkbrM/exerciseiconv1.png';
+          img.alt = 'Exchange';
+          link.appendChild(img);
+          card.appendChild(link);
+        }
+      });
+      // Insert plus button after each exercise-cards container if not already present
+      document.querySelectorAll('.exercise-cards').forEach(function(container) {
+        const next = container.nextElementSibling;
+        if (next && next.classList && next.classList.contains('add-exercise-container')) {
+          return;
+        }
+        const addContainer = document.createElement('div');
+        addContainer.classList.add('add-exercise-container');
+        const plus = document.createElement('a');
+        plus.href = `exerciselibrary.html?day=${dayPrefixForLinks}&mode=add`;
+        plus.classList.add('add-exercise-btn');
+        plus.textContent = '+';
+        addContainer.appendChild(plus);
+        if (container.nextSibling) {
+          container.parentNode.insertBefore(addContainer, container.nextSibling);
+        } else {
+          container.parentNode.appendChild(addContainer);
+        }
+      });
+    });
+  </script>
+
+  <!-- Handle exercises selected from the Exercise Library -->
+  <script>
+    (function() {
+      const pendingJSON = localStorage.getItem('pendingAction');
+      if (!pendingJSON) return;
+      let pending;
+      try { pending = JSON.parse(pendingJSON); } catch (e) { return; }
+      if (!pending || !pending.day || pending.day !== currentDay) return;
+      const data = pending.data || {};
+      const index = pending.index;
+      function slugify(str) {
+        return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      }
+      const container = document.querySelector('.exercise-cards');
+      if (!container) {
+        localStorage.removeItem('pendingAction');
+        return;
+      }
+      const card = document.createElement('div');
+      card.classList.add('exercise-card');
+      const headerDiv = document.createElement('div');
+      headerDiv.classList.add('exercise-header');
+      const nameDiv = document.createElement('div');
+      nameDiv.classList.add('exercise-name');
+      nameDiv.textContent = data.name || '';
+      headerDiv.appendChild(nameDiv);
+      const metaDiv = document.createElement('div');
+      metaDiv.classList.add('exercise-metadata');
+      const setsVal = data.sets || '—';
+      const tempoVal = data.tempo || '—';
+      const restVal = data.rest || '—';
+      const equipVal = data.equipment || '—';
+      const exerciseSlug = slugify(data.name);
+      metaDiv.innerHTML = `<span>${setsVal}</span><span>${tempoVal}</span><span>${restVal}</span><span>${equipVal}</span><span><input type="number" class="weight-input" data-exercise="${exerciseSlug}" min="0" step="0.5"></span>`;
+      headerDiv.appendChild(metaDiv);
+      card.appendChild(headerDiv);
+      if (data.notes) {
+        const notesDiv = document.createElement('div');
+        notesDiv.classList.add('exercise-notes');
+        notesDiv.textContent = data.notes;
+        card.appendChild(notesDiv);
+      }
+      if (data.video) {
+        const videoSection = document.createElement('div');
+        videoSection.classList.add('video-section');
+        const toggleBtn = document.createElement('button');
+        toggleBtn.classList.add('toggle-video-btn');
+        const vidId = 'dynVid_' + Date.now();
+        toggleBtn.setAttribute('data-target', vidId);
+        toggleBtn.textContent = 'Show Video ▼';
+        videoSection.appendChild(toggleBtn);
+        const vidContainer = document.createElement('div');
+        vidContainer.id = vidId;
+        vidContainer.classList.add('video-container');
+        vidContainer.style.display = 'none';
+        vidContainer.innerHTML = `<iframe allow="fullscreen" allowfullscreen src="${data.video}" width="100%" height="100%" style="border:none; width:100%; height:100%; position:absolute; left:0; top:0; overflow:hidden;"></iframe>`;
+        videoSection.appendChild(vidContainer);
+        card.appendChild(videoSection);
+      }
+      let targetIndex = null;
+      if (typeof index === 'number' && !isNaN(index) && index >= 0) {
+        targetIndex = index;
+      }
+      if (targetIndex !== null && container.children[targetIndex]) {
+        container.replaceChild(card, container.children[targetIndex]);
+      } else {
+        container.appendChild(card);
+        targetIndex = container.children.length - 1;
+      }
+      // Add exchange link to new card
+      const exch = document.createElement('a');
+      exch.href = `exerciselibrary.html?day=${currentDay}&index=${targetIndex}&mode=exchange`;
+      exch.classList.add('exchange-btn');
+      const exchImg = document.createElement('img');
+      exchImg.src = 'https://i.ibb.co/hFCZkbrM/exerciseiconv1.png';
+      exchImg.alt = 'Exchange';
+      exch.appendChild(exchImg);
+      card.appendChild(exch);
+      const weightInput = card.querySelector('.weight-input');
+      if (weightInput) {
+        const storageKey = currentDay + '_' + exerciseSlug;
+        const stored = localStorage.getItem(storageKey);
+        if (stored !== null) weightInput.value = stored;
+        weightInput.addEventListener('input', function() {
+          localStorage.setItem(storageKey, this.value);
+        });
+      }
+      const videoToggle = card.querySelector('.toggle-video-btn');
+      if (videoToggle) {
+        videoToggle.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          const cont = document.getElementById(targetId);
+          if (!cont) return;
+          if (cont.style.display === 'none' || cont.style.display === '') {
+            cont.style.display = 'block';
+            this.textContent = this.textContent.replace('Show Video ▼', 'Hide Video ▲');
+          } else {
+            cont.style.display = 'none';
+            this.textContent = this.textContent.replace('Hide Video ▲', 'Show Video ▼');
+          }
+        });
+      }
+      localStorage.removeItem('pendingAction');
+    })();
+  </script>
+
+  <!-- Load Imgur embed script for logo -->
+  <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+</body>
+</html>

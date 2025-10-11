@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-In</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /*
+        A dark‑themed glassmorphic weekly check‑in form.
+        This version updates the scale container backgrounds to a dark grey to
+        contrast with the teal accent colour (#039679). The rating scales use a
+        CSS grid layout so that the numeric labels sit directly beneath their
+        corresponding radio buttons. All glassmorphism blur and border
+        treatments are preserved.
+        */
+
+        body {
+            box-sizing: border-box;
+        }
+
+        /* Glassmorphism styles */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-card {
+            /* dark glass card updated to a neutral grey gradient */
+            background: linear-gradient(180deg, rgba(40, 40, 40, 0.6), rgba(30, 30, 30, 0.5));
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Rating scale container */
+        .scale-container {
+            /* subtle dark gradient akin to the new card look */
+            /* use a dark grey gradient to match the new page aesthetic */
+            background: linear-gradient(180deg, rgba(45, 45, 45, 0.7), rgba(35, 35, 35, 0.6));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .scale-radio {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(25px);
+        }
+
+        .scale-radio:hover {
+            transform: scale(1.1);
+            border-color: rgba(3, 150, 121, 0.6);
+            box-shadow: 0 0 20px rgba(3, 150, 121, 0.4);
+        }
+
+        .scale-radio:checked {
+            /* teal gradient when selected */
+            background: linear-gradient(135deg, #039679, #02705a);
+            border-color: #039679;
+            box-shadow: 0 0 25px rgba(3, 150, 121, 0.6);
+        }
+
+        .scale-radio:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .scale-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Centre helper text and convert rating rows to grids for alignment */
+        .scale-container .flex.items-center {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+        }
+
+        .scale-container .flex.items-center input {
+            margin: 0 auto;
+        }
+
+        .scale-container .flex.items-center.mt-2 span {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px rgba(3, 150, 121, 0.5);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dark page background */
+        .animated-bg {
+            /* switch to a neutral grey gradient background */
+            background: linear-gradient(180deg, #2a2a2a 0%, #333333 50%, #2a2a2a 100%);
+        }
+
+        /* Futuristic input styles */
+        .futuristic-input {
+            /* subtle gradient fill similar to card but lighter */
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .futuristic-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .futuristic-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #039679;
+            box-shadow: 0 0 20px rgba(3, 150, 121, 0.3);
+        }
+
+        .futuristic-button {
+            /* green gradient button reminiscent of reference */
+            background: linear-gradient(90deg, #00756c, #00a28d, #00c79a);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+        }
+
+        .futuristic-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 194, 146, 0.4);
+        }
+    </style>
+</head>
+<body class="animated-bg min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <!-- Back button to return to overview page -->
+            <a href="index.html" title="Back to overview" class="back-button inline-block mb-6" onclick="window.location.href='index.html';">
+                <img src="https://i.ibb.co/C3nTYV5T/Back-Buttonv2.png" alt="Back to overview" style="width:32px;height:32px;">
+            </a>
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold text-white mb-2">Weekly Check-in</h1>
+                <p class="text-white/80 text-lg">Complete your wellness assessment below</p>
+            </div>
+
+            <!-- Check-in Form -->
+            <div class="glass-card rounded-3xl shadow-2xl p-8 fade-in">
+                <form id="checkinForm" class="space-y-8">
+                    <!-- Personal Information -->
+                    <div>
+                        <label for="fullName" class="block text-sm font-semibold text-white/90 mb-3">Name</label>
+                        <input type="text" id="fullName" name="fullName" required
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300"
+                            placeholder="Enter your full name">
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-white/90 mb-3">Email Address</label>
+                        <input type="email" id="email" name="email" required
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300"
+                            placeholder="your.email@example.com">
+                    </div>
+
+                    <!-- Date Information -->
+                    <div>
+                        <label for="todaysDate" class="block text-sm font-semibold text-white/90 mb-3">Today's Date</label>
+                        <input type="date" id="todaysDate" name="todaysDate" required readonly
+                            class="futuristic-input w-full px-4 py-3 rounded-xl text-white/80">
+                    </div>
+
+                    <!-- Weight Information -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="previousWeight" class="block text-sm font-semibold text-white/90 mb-3">Previous Weight (lbs)</label>
+                            <input type="number" id="previousWeight" name="previousWeight" step="0.1" min="0"
+                                class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300"
+                                placeholder="Previous weight">
+                        </div>
+                        <div>
+                            <label for="currentWeight" class="block text-sm font-semibold text-white/90 mb-3">Current Weight (lbs)</label>
+                            <input type="number" id="currentWeight" name="currentWeight" step="0.1" min="0" required
+                                class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300"
+                                placeholder="Current weight">
+                        </div>
+                    </div>
+
+                    <!-- Weekly Reflection -->
+                    <div>
+                        <label for="struggles" class="block text-sm font-semibold text-white/90 mb-3">Weekly Struggles</label>
+                        <textarea id="struggles" name="struggles" rows="3"
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 resize-none"
+                            placeholder="Share any challenges you faced this week..."></textarea>
+                    </div>
+
+                    <!-- Energy Level -->
+                    <div class="scale-container">
+                        <label class="block text-lg font-bold text-white mb-6 text-center">Energy Level</label>
+                        <!-- descriptive range labels -->
+                        <div class="flex justify-between text-sm text-white/70 mb-4 px-4">
+                            <span class="scale-label text-center">Low Energy</span>
+                            <span class="scale-label text-center">High Energy</span>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="energy1" name="energyLevel" value="1" required class="scale-radio">
+                            <input type="radio" id="energy2" name="energyLevel" value="2" class="scale-radio">
+                            <input type="radio" id="energy3" name="energyLevel" value="3" class="scale-radio">
+                            <input type="radio" id="energy4" name="energyLevel" value="4" class="scale-radio">
+                            <input type="radio" id="energy5" name="energyLevel" value="5" class="scale-radio">
+                            <input type="radio" id="energy6" name="energyLevel" value="6" class="scale-radio">
+                            <input type="radio" id="energy7" name="energyLevel" value="7" class="scale-radio">
+                            <input type="radio" id="energy8" name="energyLevel" value="8" class="scale-radio">
+                            <input type="radio" id="energy9" name="energyLevel" value="9" class="scale-radio">
+                            <input type="radio" id="energy10" name="energyLevel" value="10" class="scale-radio">
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <span class="text-xs text-white/60 font-medium">1</span>
+                            <span class="text-xs text-white/60 font-medium">2</span>
+                            <span class="text-xs text-white/60 font-medium">3</span>
+                            <span class="text-xs text-white/60 font-medium">4</span>
+                            <span class="text-xs text-white/60 font-medium">5</span>
+                            <span class="text-xs text-white/60 font-medium">6</span>
+                            <span class="text-xs text-white/60 font-medium">7</span>
+                            <span class="text-xs text-white/60 font-medium">8</span>
+                            <span class="text-xs text-white/60 font-medium">9</span>
+                            <span class="text-xs text-white/60 font-medium">10</span>
+                        </div>
+                    </div>
+
+                    <!-- Stress Level -->
+                    <div class="scale-container">
+                        <label class="block text-lg font-bold text-white mb-6 text-center">Stress Level</label>
+                        <!-- descriptive range labels -->
+                        <div class="flex justify-between text-sm text-white/70 mb-4 px-4">
+                            <span class="scale-label text-center">Low Stress</span>
+                            <span class="scale-label text-center">High Stress</span>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="stress1" name="stressLevel" value="1" required class="scale-radio">
+                            <input type="radio" id="stress2" name="stressLevel" value="2" class="scale-radio">
+                            <input type="radio" id="stress3" name="stressLevel" value="3" class="scale-radio">
+                            <input type="radio" id="stress4" name="stressLevel" value="4" class="scale-radio">
+                            <input type="radio" id="stress5" name="stressLevel" value="5" class="scale-radio">
+                            <input type="radio" id="stress6" name="stressLevel" value="6" class="scale-radio">
+                            <input type="radio" id="stress7" name="stressLevel" value="7" class="scale-radio">
+                            <input type="radio" id="stress8" name="stressLevel" value="8" class="scale-radio">
+                            <input type="radio" id="stress9" name="stressLevel" value="9" class="scale-radio">
+                            <input type="radio" id="stress10" name="stressLevel" value="10" class="scale-radio">
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <span class="text-xs text-white/60 font-medium">1</span>
+                            <span class="text-xs text-white/60 font-medium">2</span>
+                            <span class="text-xs text-white/60 font-medium">3</span>
+                            <span class="text-xs text-white/60 font-medium">4</span>
+                            <span class="text-xs text-white/60 font-medium">5</span>
+                            <span class="text-xs text-white/60 font-medium">6</span>
+                            <span class="text-xs text-white/60 font-medium">7</span>
+                            <span class="text-xs text-white/60 font-medium">8</span>
+                            <span class="text-xs text-white/60 font-medium">9</span>
+                            <span class="text-xs text-white/60 font-medium">10</span>
+                        </div>
+                    </div>
+
+                    <!-- Sleep Quality -->
+                    <div class="scale-container">
+                        <label class="block text-lg font-bold text-white mb-6 text-center">Sleep Quality</label>
+                        <!-- descriptive range labels -->
+                        <div class="flex justify-between text-sm text-white/70 mb-4 px-4">
+                            <span class="scale-label text-center">Poor Sleep</span>
+                            <span class="scale-label text-center">Great Sleep</span>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="sleep1" name="sleepQuality" value="1" required class="scale-radio">
+                            <input type="radio" id="sleep2" name="sleepQuality" value="2" class="scale-radio">
+                            <input type="radio" id="sleep3" name="sleepQuality" value="3" class="scale-radio">
+                            <input type="radio" id="sleep4" name="sleepQuality" value="4" class="scale-radio">
+                            <input type="radio" id="sleep5" name="sleepQuality" value="5" class="scale-radio">
+                            <input type="radio" id="sleep6" name="sleepQuality" value="6" class="scale-radio">
+                            <input type="radio" id="sleep7" name="sleepQuality" value="7" class="scale-radio">
+                            <input type="radio" id="sleep8" name="sleepQuality" value="8" class="scale-radio">
+                            <input type="radio" id="sleep9" name="sleepQuality" value="9" class="scale-radio">
+                            <input type="radio" id="sleep10" name="sleepQuality" value="10" class="scale-radio">
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <span class="text-xs text-white/60 font-medium">1</span>
+                            <span class="text-xs text-white/60 font-medium">2</span>
+                            <span class="text-xs text-white/60 font-medium">3</span>
+                            <span class="text-xs text-white/60 font-medium">4</span>
+                            <span class="text-xs text-white/60 font-medium">5</span>
+                            <span class="text-xs text-white/60 font-medium">6</span>
+                            <span class="text-xs text-white/60 font-medium">7</span>
+                            <span class="text-xs text-white/60 font-medium">8</span>
+                            <span class="text-xs text-white/60 font-medium">9</span>
+                            <span class="text-xs text-white/60 font-medium">10</span>
+                        </div>
+                    </div>
+
+                    <!-- Workouts Completed -->
+                    <div>
+                        <label for="workoutsCompleted" class="block text-sm font-semibold text-white/90 mb-3">Workouts Completed</label>
+                        <select id="workoutsCompleted" name="workoutsCompleted" required
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 text-black">
+                            <option value="">Select number</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div>
+                        <label for="specialRequests" class="block text-sm font-semibold text-white/90 mb-3">Additional Notes</label>
+                        <textarea id="specialRequests" name="specialRequests" rows="3"
+                            class="futuristic-input w-full px-4 py-3 rounded-xl focus:outline-none transition-all duration-300 resize-none"
+                            placeholder="Any additional notes or comments..."></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-6">
+                        <button type="submit"
+                            class="futuristic-button w-full text-white font-bold py-4 px-6 rounded-xl transition-all duration-300">
+                            Complete Check-In
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden glass-card rounded-3xl p-6 mt-6 fade-in">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-semibold text-white">Check-in Successful!</h3>
+                        <p class="text-white/80 mt-1">Your wellness data has been recorded. Thank you for checking in!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('todaysDate');
+            if (dateInput) {
+                dateInput.valueAsDate = new Date();
+            }
+        });
+
+        // Handle form submission
+        // Define the Zapier webhook URL here. This URL is used to send the
+        // collected form data to Zapier, which in turn populates your Google Sheet.
+        const WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/23899032/u9u4rqx/';
+
+        document.getElementById('checkinForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            // Validate required fields
+            const requiredFields = ['fullName', 'email', 'currentWeight', 'stressLevel', 'workoutsCompleted', 'energyLevel', 'sleepQuality'];
+            for (const field of requiredFields) {
+                if (!formData.get(field)) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+            }
+
+            // Locate the submit button and update its appearance
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Submitting...';
+            submitButton.disabled = true;
+
+            // Convert FormData into a plain object for serialization
+            const payload = {};
+            formData.forEach((value, key) => {
+                payload[key] = value;
+            });
+
+            // Send the data to the Zapier webhook using no-cors mode. This allows
+            // requests from file:/// pages or other origins without CORS headers.
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                // Hide the form and show the success message
+                this.parentElement.style.display = 'none';
+                document.getElementById('successMessage').classList.remove('hidden');
+            }).catch(error => {
+                alert('There was an error submitting the form: ' + error.message);
+            }).finally(() => {
+                // Reset the button state after submission
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            });
+        });
+
+        // Add glow effects on focus
+        const inputs = document.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.boxShadow = '0 0 25px rgba(3, 150, 121, 0.4)';
+            });
+            input.addEventListener('blur', function() {
+                this.style.boxShadow = '';
+            });
+        });
+    </script>
+</body>
+</html>
